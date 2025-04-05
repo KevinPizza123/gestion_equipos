@@ -7,20 +7,24 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] !== 'admin') {
 include 'conexion.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nombre_jugador = $_POST['nombre_jugador'];
+    $nombre_jugador = mysqli_real_escape_string($conn, $_POST['nombre_jugador']);
     $fecha_nacimiento = $_POST['fecha_nacimiento'];
-    $direccion = $_POST['direccion'];
-    $beca = isset($_POST['beca']) ? 1 : 0;
-    $id_equipo = $_POST['id_equipo'];
+    $id_equipo = intval($_POST['id_equipo']);
+    $numero_camiseta = intval($_POST['numero_camiseta']);
 
-    $sql = "INSERT INTO Jugadores (nombre_jugador, fecha_nacimiento, direccion, beca, id_equipo) VALUES ('$nombre_jugador', '$fecha_nacimiento', '$direccion', $beca, $id_equipo)";
+    $sql = "INSERT INTO Jugadores (nombre_jugador, fecha_nacimiento, id_equipo, numero_camiseta) VALUES ('$nombre_jugador', '$fecha_nacimiento', $id_equipo, $numero_camiseta)";
 
     if ($conn->query($sql) === TRUE) {
         echo "Jugador registrado con éxito.";
+        header("Location: lista_jugadores.php");
+        exit();
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 }
+
+$sql_equipos = "SELECT id_equipo, nombre_equipo FROM Equipos";
+$result_equipos = $conn->query($sql_equipos);
 ?>
 
 <!DOCTYPE html>
@@ -38,14 +42,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label for="fecha_nacimiento">Fecha de Nacimiento:</label><br>
         <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required><br><br>
 
-        <label for="direccion">Dirección:</label><br>
-        <input type="text" id="direccion" name="direccion" required><br><br>
+        <label for="id_equipo">Equipo:</label><br>
+        <select id="id_equipo" name="id_equipo" required>
+            <?php if ($result_equipos->num_rows > 0): ?>
+                <?php while ($row_equipo = $result_equipos->fetch_assoc()): ?>
+                    <option value="<?php echo $row_equipo['id_equipo']; ?>"><?php echo $row_equipo['nombre_equipo']; ?></option>
+                <?php endwhile; ?>
+            <?php endif; ?>
+        </select><br><br>
 
-        <label for="beca">Beca:</label><br>
-        <input type="checkbox" id="beca" name="beca"><br><br>
-
-        <label for="id_equipo">ID del Equipo:</label><br>
-        <input type="number" id="id_equipo" name="id_equipo" required><br><br>
+        <label for="numero_camiseta">Número de Camiseta:</label><br>
+        <input type="number" id="numero_camiseta" name="numero_camiseta"><br><br>
 
         <input type="submit" value="Registrar Jugador">
     </form>

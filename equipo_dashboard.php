@@ -17,6 +17,7 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] !== 'equipo') {
         <li><a href="torneos_equipo.php">Lista de Torneos</a></li>
         <li><a href="clasificacion_equipo.php">Clasificación del Equipo</a></li>
         <li><a href="clasificacion_jugadores.php">Clasificación de Jugadores</a></li>
+        <li><a href="calendario_partidos.php">Calendario de Partidos</a></li>
         <li><a href="vocalia_equipo.php">Vocalia</a></li>
         </ul>
 

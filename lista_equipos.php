@@ -6,8 +6,8 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] !== 'admin') {
 }
 include 'conexion.php';
 
-// Obtener la lista de equipos
-$sql_equipos = "SELECT id_equipo, nombre_equipo FROM Equipos";
+// Obtener la lista de equipos con más detalles
+$sql_equipos = "SELECT * FROM Equipos";
 $result_equipos = $conn->query($sql_equipos);
 ?>
 
@@ -19,12 +19,18 @@ $result_equipos = $conn->query($sql_equipos);
 <body>
     <h1>Lista de Equipos</h1>
 
+    <a href="equipos.php">Agregar Nuevo Equipo</a><br><br>
+
     <?php if ($result_equipos->num_rows > 0): ?>
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Nombre</th>
+                    <th>Categoría</th>
+                    <th>Líder</th>
+                    <th>Fecha de Creación</th>
+                    <th>Ubicación</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -33,6 +39,10 @@ $result_equipos = $conn->query($sql_equipos);
                     <tr>
                         <td><?php echo $row_equipo['id_equipo']; ?></td>
                         <td><?php echo $row_equipo['nombre_equipo']; ?></td>
+                        <td><?php echo $row_equipo['categoria']; ?></td>
+                        <td><?php echo $row_equipo['lider']; ?></td>
+                        <td><?php echo $row_equipo['fecha_creacion']; ?></td>
+                        <td><?php echo $row_equipo['ubicacion']; ?></td>
                         <td>
                             <a href="editar_equipo.php?id_equipo=<?php echo $row_equipo['id_equipo']; ?>">Editar</a> |
                             <a href="eliminar_equipo.php?id_equipo=<?php echo $row_equipo['id_equipo']; ?>">Eliminar</a>

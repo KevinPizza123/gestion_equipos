@@ -6,8 +6,10 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] !== 'admin') {
 }
 include 'conexion.php';
 
-// Obtener la lista de jugadores
-$sql_jugadores = "SELECT id_jugador, nombre_jugador, posicion, numero_camiseta, fecha_nacimiento FROM Jugadores";
+// Obtener la lista de jugadores con el nombre del equipo
+$sql_jugadores = "SELECT Jugadores.id_jugador, Jugadores.nombre_jugador, Jugadores.numero_camiseta, Jugadores.fecha_nacimiento, Equipos.nombre_equipo , Equipos.categoria
+                  FROM Jugadores
+                  INNER JOIN Equipos ON Jugadores.id_equipo = Equipos.id_equipo";
 $result_jugadores = $conn->query($sql_jugadores);
 ?>
 
@@ -25,9 +27,10 @@ $result_jugadores = $conn->query($sql_jugadores);
                 <tr>
                     <th>ID</th>
                     <th>Nombre</th>
-                    <th>Posición</th>
                     <th>Número de Camiseta</th>
                     <th>Fecha de Nacimiento</th>
+                    <th>Equipo</th>
+                    <th>Categoria</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -36,11 +39,12 @@ $result_jugadores = $conn->query($sql_jugadores);
                     <tr>
                         <td><?php echo $row_jugador['id_jugador']; ?></td>
                         <td><?php echo $row_jugador['nombre_jugador']; ?></td>
-                        <td><?php echo $row_jugador['posicion']; ?></td>
                         <td><?php echo $row_jugador['numero_camiseta']; ?></td>
                         <td><?php echo $row_jugador['fecha_nacimiento']; ?></td>
+                        <td><?php echo $row_jugador['nombre_equipo']; ?></td>
+                        <td><?php echo $row_jugador['categoria']; ?></td>
                         <td>
-                            <a href="editar_jugador.php?id_jugador=<?php echo $row_jugador['id_jugador']; ?>">Editar</a> |
+                            <a href="jugador_editar.php?id_jugador=<?php echo $row_jugador['id_jugador']; ?>">Editar</a> |
                             <a href="eliminar_jugador.php?id_jugador=<?php echo $row_jugador['id_jugador']; ?>">Eliminar</a>
                         </td>
                     </tr>

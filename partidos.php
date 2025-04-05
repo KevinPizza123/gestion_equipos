@@ -58,11 +58,14 @@ $result_equipos = $conn->query($sql_equipos);
 
         <label for="id_equipo_visitante">Equipo Visitante:</label><br>
         <select id="id_equipo_visitante" name="id_equipo_visitante" required>
-            <?php if ($result_equipos->num_rows > 0): ?>
-                <?php while ($row_equipo = $result_equipos->fetch_assoc()): ?>
-                    <option value="<?php echo $row_equipo['id_equipo']; ?>"><?php echo $row_equipo['nombre_equipo']; ?></option>
-                <?php endwhile; ?>
-            <?php endif; ?>
+            <?php
+            if ($result_equipos->num_rows > 0) {
+                $result_equipos->data_seek(0); // Reiniciar el puntero del resultado
+                while ($row_equipo = $result_equipos->fetch_assoc()) {
+                    echo '<option value="' . $row_equipo['id_equipo'] . '">' . $row_equipo['nombre_equipo'] . '</option>';
+                }
+            }
+            ?>
         </select><br><br>
 
         <label for="fecha_partido">Fecha y Hora del Partido:</label><br>
